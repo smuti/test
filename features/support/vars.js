@@ -2,11 +2,36 @@ var startPathPrefixDev = "sabrimutlucag.dev.";
 var startPathPrefixLive = "www.";
 var startPath = "https://"+ startPathPrefixLive +"udemy.com/";
 
+function getDataPurposeOfElement(text, type) {
+	let elements;
+	
+	switch(type) {
+		case 'link':
+			elements = this.elementList.linkList;
+			break;
+		case 'input':
+			elements = this.elementList.inputList;
+			break;
+		case 'button':
+			elements = this.elementList.buttonList;
+			break;
+	}
+
+	for (var element in elements) {
+		if (elements[element].identifier === text) {
+			return elements[element].dataPurpose;
+		}
+	};
+
+	return null;
+};
+
 module.exports = {
 	//web application page&popup list
 	pageList: {
 		// home page 
 		home: {
+			getDataPurposeOfElement: getDataPurposeOfElement,
 			// deciding is page or popup
 			isPopup: false,
 			// used for pages
@@ -55,6 +80,7 @@ module.exports = {
 		},
 		// login popup
 		login: {
+			getDataPurposeOfElement: getDataPurposeOfElement,
 			// deciding is page or popup
 			isPopup: true,
 			url: "",
@@ -90,6 +116,7 @@ module.exports = {
 		},
 		// login popup
 		signup: {
+			getDataPurposeOfElement: getDataPurposeOfElement,
 			// deciding is page or popup
 			isPopup: true,
 			url: "",
@@ -131,6 +158,7 @@ module.exports = {
 		},
 		// feature page
 		featured: {
+			getDataPurposeOfElement: getDataPurposeOfElement,
 			// deciding is page or popup
 			isPopup: false,
 			url: startPath + "courses/",

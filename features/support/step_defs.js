@@ -1,23 +1,7 @@
 var mappings = require('./vars');
+var ui = require('./ui');
 //web apps page&popup list
 var pageList = mappings.pageList;
-// used for element existence waiting period
-var minWaitTime = 10000;
-var maxWaitTime = 20000;
-
-//click a link using data-purpose
-function checkLinkExistAndClickItWithDataPurpose(data_purpose) {
-  var cssSelector = "a[data-purpose='" + data_purpose + "']";
-  browser.waitForExist(cssSelector, minWaitTime);
-  browser.click(cssSelector);
-}
-
-//set inputs value
-function setElementValue(data_purpose, value) {
-  var cssSelector = "input[data-purpose='" + data_purpose + "']";
-  browser.waitForExist(cssSelector, minWaitTime);
-  browser.setValue(cssSelector, value);
-}
 
 module.exports = function() {
 
@@ -30,13 +14,8 @@ module.exports = function() {
   //click a link on relevant page
   this.When(/^I click "([^"]*)" link on "([^"]*)" page$/, 
     function (link_name, page_name) {
-      let links = pageList[page_name].elementList.linkList;
-      for (var link in links) {
-        if(links[link].identifier === link_name) {
-          checkLinkExistAndClickItWithDataPurpose(links[link].dataPurpose);
-          break;
-        }
-      }
+      var pageObject = pageList[page_name];
+      ui.checkLinkExistAndClickItWithDataPurpose(pageObject.getDataPurposeOfElement(link_name, 'link'));
   });
 
   //set an input to a value on relevant page
@@ -44,14 +23,11 @@ module.exports = function() {
     function (input_identifier, value, popup_name) {
       let popupObject = pageList[popup_name];
       let cssSelector = popupObject.class;
-      browser.waitForExist(cssSelector, minWaitTime);
-      let inputs = popupObject.elementList.inputList;
-      for (var input in inputs) {
-          if(inputs[input].identifier === input_identifier) {
-            setElementValue(inputs[input].dataPurpose, value);
-            break;
-          }
-        };
+      browser.waitForExist(cssSelector, ui.minWaitTime);
+      let input_purpose = popupObject.getDataPurposeOfElement(input_identifier, 'input');
+      if (input_purpose !== null) {
+        ui.setElementValue(input_purpose, value);
+      }
   });
 
   //click a button on relevant page
@@ -59,15 +35,12 @@ module.exports = function() {
     function (button_identifier, popup_name) {
       let popupObject = pageList[popup_name];
       let cssSelector = popupObject.class;
-      browser.waitForExist(cssSelector, minWaitTime);
-      let buttons = popupObject.elementList.buttonList;
-      for (var button in buttons) {
-          if(buttons[button].identifier === button_identifier) {
-            let cssSelector = "input[data-purpose='" + buttons[button].dataPurpose + "']";
-            browser.click(cssSelector);
-            break;
-          }
-        };
+      browser.waitForExist(cssSelector, ui.minWaitTime);
+      let buttonPurpose = popupObject.getDataPurposeOfElement(button_identifier, 'button');
+      if (buttonPurpose !== null) {
+        let cssSelector = "input[data-purpose='" + buttonPurpose + "']";
+        browser.click(cssSelector);
+      }
   });
 
   //checks whether or not user on right page
@@ -76,7 +49,7 @@ module.exports = function() {
       var pageObject = pageList[page_name];
       var validationElement = pageObject.validationElement;
       var cssSelector = validationElement.dataPurposePrefix + "[data-purpose='" + validationElement.dataPurpose + "']";
-      browser.waitForExist(cssSelector, maxWaitTime);
+      browser.waitForExist(cssSelector, ui.maxWaitTime);
       expect(browser.getUrl()).toEqual(pageObject.url);
   });
 };

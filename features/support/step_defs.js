@@ -2,8 +2,8 @@ var mappings = require('./vars');
 //web apps page&popup list
 var pageList = mappings.pageList;
 // used for element existence waiting period
-var minWaitTime = 2000;
-var maxWaitTime = 8000;
+var minWaitTime = 10000;
+var maxWaitTime = 20000;
 
 //click a link using data-purpose
 function checkLinkExistAndClickItWithDataPurpose(data_purpose) {

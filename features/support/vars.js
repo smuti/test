@@ -1,3 +1,7 @@
+var startPathPrefixDev = "sabrimutlucag.dev.";
+var startPathPrefixLive = "www.";
+var startPath = "https://"+ startPathPrefixLive +"udemy.com/";
+
 module.exports = {
 	//web application page&popup list
 	pageList: {
@@ -6,7 +10,7 @@ module.exports = {
 			// deciding is page or popup
 			isPopup: false,
 			// used for pages
-			url: "https://www.udemy.com/",
+			url: startPath,
 			//used for popups
 			class: "",
 			//used for page loaded
@@ -84,16 +88,57 @@ module.exports = {
 				}
 			}
 		},
+		// login popup
+		signup: {
+			// deciding is page or popup
+			isPopup: true,
+			url: "",
+			//used for popups
+			class: ".js-signin-box",
+			//page's/popup's element list
+			elementList: {
+				//inputs contained by page/popup
+				inputList: {
+					fullname: {
+						identifier: "Fullname",
+						dataPurpose: "fullname",
+						clickable: true,
+						writable:true
+					},
+					email: {
+						identifier: "Email",
+						dataPurpose: "email",
+						clickable: true,
+					 	writable: true
+					},
+					password: {
+						identifier: "Password",
+						dataPurpose: "password",
+						clickable: true,
+					 	writable: true
+					}
+				},
+				//buttons contained by page/popup
+				buttonList: {
+					signup: {
+						identifier: "Sign Up",
+						dataPurpose: "do-signup",
+						clickable: true,
+					 	writable: true
+					}
+				}
+			}
+		},
 		// feature page
 		featured: {
 			// deciding is page or popup
 			isPopup: false,
-			url: "https://www.udemy.com/courses/",
+			url: startPath + "courses/",
 			class: "",
 			// used for page loaded
 			validationElement: {
-				dataPurpose: "instructor-dropdown",
-				dataPurposePrefix: "a"
+				dataPurpose: "cart-icon",
+				dataPurposePrefix: "i"
 			}
 		}
 	}
